@@ -1,4 +1,6 @@
 <?php
+
+
 class User{
     private $conn;
 
@@ -12,8 +14,8 @@ class User{
 
                 //Verifico que el email no exista
 
-                $check = $this ->conn ->prepare("SELECT user_id FROM user WHERE email = ?");
-                $check->execute(['email']);
+                $check = $this ->conn ->prepare("SELECT user_id FROM users WHERE email = ?");
+                $check->execute([$email]);
                 //fetch devuelve una fila si es que existe
                 if($check->fetch()){
                     return ['error' => 'Este email ya está registrado.'];
@@ -22,7 +24,6 @@ class User{
                 $stmt = $this->conn->prepare("INSERT INTO user (name, email, password, member_num)
                                                 VALUES (?, ?, ?, ?)");
                 $stmt->execute([$name,$email, password_hash($password, PASSWORD_DEFAULT), $member_num]);
-                http_response_code(201);
                 return ["success" => "¡Registro exitoso!"];
             }catch(PDOException $e){
                 http_response_code(500);
@@ -30,6 +31,38 @@ class User{
             }
     }
     //login
-}
+    public function login($email, $password){
+        
+        try{
+            //Verificar que los campos esten completos
+            if (empty($email) || empty($password)) {
+                return ['error' => 'Email y contraseña requeridos'];
+            }
 
+
+            $stmt = $this->conn->prepare("SELECT * FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$user) {
+                return ['error' => 'Usuario no encontrado'];
+            }
+
+            if(password_verify($password,$user['password'])){
+                return [
+                    'success' => 'Inicio de sesión exitoso',
+                    'user' => [
+                        'id' => $user['user_id'],
+                        'name' => $user['name'],
+                        'email' => $user['email']
+                    ]
+                ];
+            } else {
+                return ['error' => 'Contraseña incorrecta'];
+            }
+    }catch (PDOException $e) {
+        return ['error' => 'Error al iniciar sesión: ' . $e->getMessage()];
+        }
+    }
+}
 ?>
