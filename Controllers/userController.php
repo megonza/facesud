@@ -6,6 +6,7 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 #Importo DB
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../Models/user.php';
+require_once __DIR__ . '/../vendor/autoload.php'; 
 
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
@@ -23,20 +24,20 @@ if ($method =="POST"){
     //decodifico el json que veiene del react
     $data = json_decode(file_get_contents('php://input'), true);
 
-    //verifico que los datos no esten vacios
-    if (!$data || !isset($data['name'],$data['email'],$data['password'],$data['member_num'])){
 
-            //En caso de estar vacio responde:
-            http_response_code(400);
-            echo json_encode(["error" => "Datos incompletos"]) ;
-            exit;
-    }
 
     //si la clave 'action' del cuerpo del json tiene algo entonces: 
-    elseif (isset($data['action'])) {
+    if (isset($data['action'])) {
         //Aca dependiendo del action del cuerpo va a traer las distintas funciones de user.php
         switch($data['action']){
             case 'register':
+                //verifico que los datos no esten vacios
+                if (!$data || !isset($data['name'],$data['email'],$data['password'],$data['member_num'])){
+                    //En caso de estar vacio responde:
+                    http_response_code(400);
+                    echo json_encode(["error" => "Datos incompletos"]) ;
+                    exit;
+                }
                 $result = $userModel->register(
                     $data['name'],
                    $data['email'],
@@ -48,6 +49,10 @@ if ($method =="POST"){
 
             //Caso login
             case 'login':
+                //Verificar que los campos esten completos
+                if (empty($data['email']) || empty($data['password'])) {
+                    return ['error' => 'Email y contraseña requeridos'];
+                }
                 $user = $userModel->login($data['email'], $data['password']);
                 
                 if($user){

@@ -21,7 +21,7 @@ class User{
                     return ['error' => 'Este email ya está registrado.'];
                 }
 
-                $stmt = $this->conn->prepare("INSERT INTO user (name, email, password, member_num)
+                $stmt = $this->conn->prepare("INSERT INTO users (name, email, password, member_num)
                                                 VALUES (?, ?, ?, ?)");
                 $stmt->execute([$name,$email, password_hash($password, PASSWORD_DEFAULT), $member_num]);
                 return ["success" => "¡Registro exitoso!"];
@@ -34,12 +34,6 @@ class User{
     public function login($email, $password){
         
         try{
-            //Verificar que los campos esten completos
-            if (empty($email) || empty($password)) {
-                return ['error' => 'Email y contraseña requeridos'];
-            }
-
-
             $stmt = $this->conn->prepare("SELECT * FROM users WHERE email = ?");
             $stmt->execute([$email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -52,7 +46,7 @@ class User{
                 return [
                     'success' => 'Inicio de sesión exitoso',
                     'user' => [
-                        'id' => $user['user_id'],
+                        'user_id' => $user['user_id'],
                         'name' => $user['name'],
                         'email' => $user['email']
                     ]
