@@ -1,0 +1,5 @@
+1 Validar datos del formulario
+    Numero de miembro: SOLO Numero y solo 11 digitos
+    Contraseñas seguras
+    nombre usuario no repetido
+    
