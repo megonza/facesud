@@ -1,8 +1,16 @@
-<?php 
+<?php
 header('Content-Type: application/json');
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Credentials: true");
+#userController.php version API REST papaaa
+$method = $_SERVER['REQUEST_METHOD'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 #Importo DB
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../Models/user.php';
@@ -14,8 +22,7 @@ use \Firebase\JWT\Key;
 $secretKey = "contraseña"; 
 $expirationTime = time() + 3600; // 1 hora
 
-#userController.php version API REST papaaa
-$method = $_SERVER['REQUEST_METHOD'];
+
 //Crea el objeto User
 $userModel = new User($conn);
 
