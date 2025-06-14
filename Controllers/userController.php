@@ -48,6 +48,14 @@ if ($method =="POST"){
                     $result = ['error' => 'Las contraseñas no coinciden.'];
                     break;
                 }
+                //Verifico la contraseña segura
+                $safe_pass = safe_password($data['password']);
+                if ($safe_pass !== true){
+                    http_response_code(400);
+                    $result = ['error' => "La contraseña no es segura: $safe_pass"];
+                    break;
+                }
+
 
                 $result = $userModel->register(
                     $data['name'],

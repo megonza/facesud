@@ -16,4 +16,14 @@
             return $password == $confirmPassword;
     }
 
+    function safe_password($password){
+        if(strlen($password) < 8) return "La contraseña debetener al menos 8 caracteres";
+        if(!preg_match('/[a-z]/', $password)) return "Debe tener al menos una minuscula";
+        if(!preg_match('/[A-Z]/', $password)) return "Debe tener al menos una mayuscula";
+        if(!preg_match('/[0-9]/', $password)) return "Debe tener al menos un numero";
+        if(!preg_match('/[\W]/', $password)) return "Debe tener al menos un caracter especial";
+
+        return true;
+    }
+
 ?>
