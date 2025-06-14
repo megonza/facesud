@@ -58,5 +58,23 @@ class User{
         return ['error' => 'Error al iniciar sesión: ' . $e->getMessage()];
         }
     }
+
+    public static function getUserByID($id, $conn){
+        try{
+            $stmt = $conn->prepare('SELECT * FROM users WHERE user_id = ?');
+            $stmt->execute([$id]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($user){
+                unset($user['password']); //Para no devolver la contraseña
+                return ['success' => true, 'data' => $user];
+            } else {
+                return ["success" => false, "message" => "Usuario no encontrado"];
+            } 
+        } catch (PDOException $e) {
+        return ["success" => false, "message" => "Error en base de datos"];
+        }
+    }
+
 }
 ?>

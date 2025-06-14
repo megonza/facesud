@@ -26,4 +26,13 @@
         return true;
     }
 
+    //Para obtener los headers
+    //REutilizable para otros metodos (create_post, edit_profile)
+    function getTokensHeader(){
+        $headers = getallheaders();
+        if(isset($headers['Authorization'])){
+            return trim(str_replace('Bearer', '', $headers['Authorization']));
+        }
+        return null;
+    }
 ?>

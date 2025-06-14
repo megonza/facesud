@@ -3,6 +3,9 @@ header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Authorization, Content-Type");
+
 #Importo DB
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../Models/user.php';
@@ -103,7 +106,30 @@ if ($method =="POST"){
                     http_response_code(401);
                     //exit;
                 }
-            break;
+                break;
+                
+            case 'profile':
+                $jwt = getTokensHeader();
+                if(!$jwt){
+                    http_response_code(400);
+                    $result = ["success" => false, "message" => "Token no proporcionado"];
+                    break;
+                }
+                
+
+                try{
+                    $decoded = JWT::decode($jwt, new Key($secretKey, 'HS256'));
+                    $id = $decoded->data->id;
+
+                    $result = $userModel->getUserByID($id, $conn);
+
+                    http_response_code($result['success'] ? 200 : 404);
+                } catch (Exception $e){
+                        http_response_code(401);
+                        $result = ["success" => false, "message" => "Token inválido o expirado". $e->getMessage()];
+                }
+                break;
+
             default:
                 http_response_code(400);
                 $result = ["error" => "Acción no válida"];
