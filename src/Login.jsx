@@ -10,13 +10,16 @@ const Login = () => {
         e.preventDefault();
         
         try {
-            const response = await fetch('', {
+            const response = await fetch('api/userController.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ action: 'login', email, password })
             });
 
-            const data = await response.json();
+            const text = await response.text();
+            console.log("Respuesta completa:", text); // Verás el error exacto
+            const data = JSON.parse(text);
+
             if (response.ok) {
                 alert('Inicio de sesión exitoso.');
                 window.location.href = '/index.html';

@@ -27,9 +27,9 @@ const Register = () => {
             });
 
 
-            const text = await response.text(); // leer como texto crudo
-            console.log("Respuesta completa:", text); // <---- revisa qué devuelve PHP
-            const data = JSON.parse(text); // convierte manualmente
+            const text = await response.text(); 
+            console.log("Respuesta completa:", text); 
+            const data = JSON.parse(text); 
 
             if (response.ok) {
                 setSuccess('¡Registrado con éxito! Ya puedes iniciar sesión.');
