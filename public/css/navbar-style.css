@@ -1,0 +1,33 @@
+* {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*---------- NAVBAR SECTION ----------*/
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+}
+.navbar-options button {
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 7px;
+}
+.btn-login {
+    color: #fff;
+    background-color: #006184;
+}
+.btn-login:hover {
+    background-color: #007da5;
+}
+.btn-register {
+    color: #006184;
+    background: none;
+}
+.btn-register:hover {
+    outline: 1px solid #006184;
+}

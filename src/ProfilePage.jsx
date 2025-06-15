@@ -1,6 +1,9 @@
+import Navbar from './Navbar';
+
 function ProfilePage() {
     return(
         <div>
+            <Navbar />
             <section className="section-banner">
                 <div className="banner-container">
                     <div className="banner-image">
