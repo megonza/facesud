@@ -3,3 +3,9 @@
     Contraseñas seguras
     nombre usuario no repetido
     
+2.Encapsular algunas funciones en otro archivo
+
+3. pedir en el register fecha de nacimiento para mandar alertas de cumpleaños
+
+
+

@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../Models/user.php';
 require_once __DIR__ . '/../vendor/autoload.php'; 
+require 'helpers.php';
 
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
@@ -35,31 +36,54 @@ if ($method =="POST"){
 
     //si la clave 'action' del cuerpo del json tiene algo entonces: 
     if (isset($data['action'])) {
-        //Aca dependiendo del action del cuerpo va a traer las distintas funciones de user.php
+
+        //Segun el action: Trae de user.php
         switch($data['action']){
             case 'register':
+
                 //verifico que los datos no esten vacios
-                if (!$data || !isset($data['name'],$data['email'],$data['password'],$data['member_num'])){
-                    //En caso de estar vacio responde:
+                $required_fields = ['name', 'email', 'password', 'member_num'];
+                if(!required_fields($data, $required_fields)){
                     http_response_code(400);
-                    echo json_encode(["error" => "Datos incompletos"]) ;
-                    exit;
+                    $result = ["error" => "Datos incompletos"];
+                    break;
                 }
+
+                //Verifico que las contraseñas coincidan
+                if(!validate_password($data['password'], $data['confirmPassword'])){
+                    http_response_code(400);
+                    $result = ['error' => 'Las contraseñas no coinciden.'];
+                    break;
+                }
+                //Verifico la contraseña segura
+                $safe_pass = safe_password($data['password']);
+                if ($safe_pass !== true){
+                    http_response_code(400);
+                    $result = ['error' => "La contraseña no es segura: $safe_pass"];
+                    break;
+                }
+
+
                 $result = $userModel->register(
                     $data['name'],
                    $data['email'],
                 $data['password'],
               $data['member_num']);
                 http_response_code(isset($result['success']) ? 201 : 400); // 201 = creado
-                echo json_encode($result);
+                #echo json_encode($result);
                 break;
 
             //Caso login
             case 'login':
+
                 //Verificar que los campos esten completos
-                if (empty($data['email']) || empty($data['password'])) {
-                    return ['error' => 'Email y contraseña requeridos'];
+                $required_fields = ['email', 'password'];
+                if(!required_fields($data, $required_fields)){
+                    http_response_code(400);
+                    $result = ["error" => "Datos incompletos"];
+                    break;
                 }
+    
                 $user = $userModel->login($data['email'], $data['password']);
                 
                 if($user){
@@ -80,18 +104,44 @@ if ($method =="POST"){
                         'token' => $jwt,
                         'user' => $user
                     ]);
-                }else {
-                    echo json_encode(["message" => "Credenciales incorrectas"]);
-                    http_response_code(401);
                     exit;
+                }else {
+                    $result = ["message" => "Credenciales incorrectas"];
+                    http_response_code(401);
+                    //exit;
                 }
-            break;
+                break;
+                
+            case 'profile':
+                $jwt = getTokensHeader();
+                if(!$jwt){
+                    http_response_code(400);
+                    $result = ["success" => false, "message" => "Token no proporcionado"];
+                    break;
+                }
+                
+
+                try{
+                    $decoded = JWT::decode($jwt, new Key($secretKey, 'HS256'));
+                    $id = $decoded->data->id;
+
+                    $result = $userModel->getUserByID($id, $conn);
+
+                    http_response_code($result['success'] ? 200 : 404);
+                } catch (Exception $e){
+                        http_response_code(401);
+                        $result = ["success" => false, "message" => "Token inválido o expirado". $e->getMessage()];
+                }
+                break;
+
             default:
                 http_response_code(400);
                 $result = ["error" => "Acción no válida"];
                 break;
     }
-    echo json_encode($result);
+    if (isset($result)) {
+        echo json_encode($result);
+    }
 }else {
         http_response_code(400);
         echo json_encode(["error" => "No se especificó una acción"]);
