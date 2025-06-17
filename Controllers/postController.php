@@ -73,7 +73,10 @@ if ($method === "POST") {
             http_response_code($result['success'] ? 200 : 404);
             break;
 
-
+        case "getAllPost":
+            $result = Post::getAllPost($conn);
+            http_response_code($result['success'] ? 200 : 500);
+            break;
 
         default:
             http_response_code(400);

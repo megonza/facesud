@@ -1,5 +1,6 @@
 <?php 
 class Post {
+    //Crear posts
     public static function createPost($user_id, $text, $conn) {
         try {
             if (trim($text) === '') {
@@ -24,7 +25,7 @@ class Post {
             ];
         }
     }
-
+    //obtener un post de un usuario
     public static function get_post($post_id, $conn){
         try{
             $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.name AS author 
@@ -52,7 +53,7 @@ class Post {
         ];
         }
     }
-
+    //obtener todos los post de un usuario
     public static function getUserPost($user_id, $conn){
         try{
             $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.user_id AS Author
@@ -71,6 +72,28 @@ class Post {
             return [
                 "success" => false,
                 "message" => "Error al obtener los posts del usuario: " . $e->getMessage()
+            ];
+        }
+    }
+    //mostrar todos los posts de todos los usuarios
+    public static function getAllPost($conn){
+        try{
+            $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.user_id, u.name AS Author_name
+                                    FROM posts p
+                                    JOIN users u ON p.user_id = u.user_id
+                                    ORDER BY p.date_posted DESC");
+
+            $stmt->execute();
+            $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return [
+            "success" => true,
+            "data" => $posts
+        ];
+        }catch(PDOException $e){
+            return [
+            "success" => false,
+            "message" => "Error al obtener los posts: " . $e->getMessage()
             ];
         }
     }
