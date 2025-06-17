@@ -36,7 +36,7 @@ if ($method =="POST"){
             case 'register':
 
                 //verifico que los datos no esten vacios
-                $required_fields = ['name', 'email', 'password', 'member_num'];
+                $required_fields = ['name', 'email', 'password',"confirmPassword", 'member_num'];
                 if(!required_fields($data, $required_fields)){
                     http_response_code(400);
                     $result = ["error" => "Datos incompletos"];
