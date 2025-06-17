@@ -6,6 +6,33 @@
 2.Encapsular algunas funciones en otro archivo
 
 3. pedir en el register fecha de nacimiento para mandar alertas de cumpleaños
+-------------------------------------------------------------------------
+get_post:
 
+    Objetivo: Obtener una sola publicación específica usando su post_id.
 
+    Ejemplo de uso:
 
+    Cuando un usuario entra a ver los detalles de un solo post.
+
+    Para cargar comentarios de ese post.
+
+get_all_posts:
+
+    Objetivo: Obtener todas las publicaciones del sistema.
+
+    Ejemplo de uso:
+
+    Página principal o timeline general.
+
+    Explorar publicaciones públicas.
+
+get_user_posts:
+
+    Objetivo: Obtener todos los posts de un usuario en particular (por ejemplo, su perfil).
+
+    Ejemplo de uso:
+
+    Cuando un usuario entra al perfil de otro.
+
+    Mostrar publicaciones propias.
