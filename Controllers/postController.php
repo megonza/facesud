@@ -39,7 +39,7 @@ if ($method === "POST") {
         $user_id = $decoded->data->id;
     }catch(Exception $e){
         http_response_code(401);
-        echo json_encode(["error" => "Token invalido"]);
+        echo json_encode(value: ["error" => "Token invalido"]);
         exit;
     }
 
@@ -53,6 +53,16 @@ if ($method === "POST") {
 
             $result = POST::createPost($user_id,$data["text"],$conn);
             http_response_code($result['success'] ? 201 : 500);
+            break;
+
+        case "get_post":
+            if (empty($data['post_id'])) {
+            http_response_code(400);
+            $result = ["error" => "Se requiere el ID del post"];
+            break;
+            }
+            $result = Post::get_post($data['post_id'], $conn);
+            http_response_code($result['success'] ? 200 : 404);
             break;
 
         default:
