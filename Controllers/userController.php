@@ -15,8 +15,6 @@ require 'helpers.php';
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
 
-$secretKey = "contraseña"; 
-$expirationTime = time() + 3600; // 1 hora
 
 #userController.php version API REST papaaa
 $method = $_SERVER['REQUEST_METHOD'];
