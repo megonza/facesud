@@ -17,7 +17,7 @@ get_post:
 
     Para cargar comentarios de ese post.
 
-get_all_posts:
+getAllPosts:
 
     Objetivo: Obtener todas las publicaciones del sistema.
 
@@ -27,7 +27,7 @@ get_all_posts:
 
     Explorar publicaciones públicas.
 
-get_user_posts:
+getUserPosts:
 
     Objetivo: Obtener todos los posts de un usuario en particular (por ejemplo, su perfil).
 

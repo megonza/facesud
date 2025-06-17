@@ -65,6 +65,16 @@ if ($method === "POST") {
             http_response_code($result['success'] ? 200 : 404);
             break;
 
+        case "getUserPost":
+            //Indica que en la variable se va a guardar el id de usuario que se pidió o sino el del usuario logueado
+            $user_profile_id = $data["user_id"] ?? $user_id;
+
+            $result = Post::getUserPost($user_profile_id, $conn);
+            http_response_code($result['success'] ? 200 : 404);
+            break;
+
+
+
         default:
             http_response_code(400);
             $result = ["error" => "Accion invalida"];
