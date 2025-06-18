@@ -29,9 +29,15 @@ class Post {
     public static function get_post($post_id, $conn){
         try{
             $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.name AS author 
+                                    COUNT(DISTINCT pl.like_id) AS likes_count,
+                                    COUNT(DISTINCT c.comments_id) AS comments_count 
                                     FROM posts p 
                                     JOIN users u ON p.user_id = u.user_id 
-                                    WHERE p.post_id = ?");
+                                    LEFT JOIN post_likes pl ON p.post_id = pl.post_id
+                                    LEFT JOIN comments c ON p.post_id = c.post_id
+                                    WHERE p.post_id = ?
+                                    GROUP BY p post_id");
+                                    
             $stmt->execute([$post_id]);
             $post = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -56,10 +62,15 @@ class Post {
     //obtener todos los post de un usuario
     public static function getUserPost($user_id, $conn){
         try{
-            $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.user_id AS Author
+            $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.user_id AS Author,
+                                    COUNT(DISTINCT pl.like_id) AS likes_count,
+                                    COUNT(DISTINCT c.comments_id) AS comments_count 
                                     FROM posts p
                                     JOIN users u ON p.user_id=u.user_id
+                                    LEFT JOIN post_likes pl ON p.post_id = pl.post_id
+                                    LEFT JOIN comments c ON p.post_id = c.post_id
                                     WHERE p.user_id = ?
+                                    GROUP BY p.post_id
                                     ORDER BY p.date_posted DESC");
             $stmt->execute([$user_id]);
             $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -78,9 +89,14 @@ class Post {
     //mostrar todos los posts de todos los usuarios
     public static function getAllPost($conn){
         try{
-            $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.user_id, u.name AS Author_name
+            $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.user_id, u.name AS Author_name,
+                                    COUNT(DISTINCT pl.like_id) AS likes_count,
+                                    COUNT(DISTINCT c.comments_id) AS comments_count 
                                     FROM posts p
                                     JOIN users u ON p.user_id = u.user_id
+                                    LEFT JOIN post_likes pl ON p.post_id = pl.post_id
+                                    LEFT JOIN comments c ON p.post_id = c.post_id
+                                    GROUP BY p.post_id
                                     ORDER BY p.date_posted DESC");
 
             $stmt->execute();
