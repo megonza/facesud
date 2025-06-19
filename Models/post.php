@@ -1,7 +1,7 @@
 <?php 
 class Post {
     //Crear posts
-    public static function createPost($user_id, $text, $conn) {
+    public static function createPost($user_id, $text, $conn, $image_path = null) {
         try {
             if (trim($text) === '') {
                 return [
@@ -10,8 +10,8 @@ class Post {
                 ];
             }
 
-            $stmt = $conn->prepare("INSERT INTO posts (user_id, text) VALUES (?, ?)");
-            $stmt->execute([$user_id, $text]);
+            $stmt = $conn->prepare("INSERT INTO posts (user_id, text, image_path) VALUES (?, ?, ?)");
+            $stmt->execute([$user_id, $text, $image_path]);
 
             return [
                 "success" => true,

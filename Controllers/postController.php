@@ -16,9 +16,15 @@ use Firebase\JWT\Key;
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === "POST") {
-    $data = json_decode(file_get_contents("php://input"), true);
-    $headers = getallheaders();
-    $result = [];
+    $contentType = $_SERVER["CONTENT_TYPE"] ?? '';
+    if (str_starts_with($contentType, 'multipart/form-data')) {
+        $data = $_POST;
+    } else {
+        $data = json_decode(file_get_contents("php://input"), true);
+    }
+    // $data = json_decode(file_get_contents("php://input"), true);
+    // $headers = getallheaders();
+    // $result = [];
 
 
     if (!isset($data['action'])) {
@@ -52,6 +58,35 @@ if ($method === "POST") {
             }
 
             $result = POST::createPost($user_id,$data["text"],$conn);
+            http_response_code($result['success'] ? 201 : 500);
+            break;
+
+        case "create_post_with_image":
+            //verifico si existe el campo text y si esta vacio
+            if (!isset($_POST['text']) || empty($_POST['text'])){
+                http_response_code(400);
+                $result = ["error" => "Texto requerido"];
+                break;
+            }
+
+            $image_path = null;
+
+            if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK){
+                $image_name = uniqid() . "_" . basename($_FILES['image']['name']);
+                $uplaod_dir = __DIR__ . '/../uploads/';
+                if (!is_dir($uplaod_dir)) mkdir($uplaod_dir);
+                $upload_path = $uplaod_dir . $image_name;
+
+                if(move_uploaded_file($_FILES['image']['tmp_name'], $upload_path)){
+                    $upload_path = 'uploads/' . $image_name;
+                }else{
+                    http_response_code(500);
+                    $result = ["error" => "Error al subir la imagen"];
+                    break;
+                }
+            }
+            $text = $_POST['text'];
+            $result = Post::createPost($user_id, $text, $conn, $image_path);
             http_response_code($result['success'] ? 201 : 500);
             break;
 
