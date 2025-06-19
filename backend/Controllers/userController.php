@@ -84,7 +84,7 @@ if ($method =="POST"){
     
                 $user = $userModel->login($data['email'], $data['password']);
                 
-                if($user){
+                if(!isset($user['error'])){
                     $payload =[
                         'iat' => time(),
                         'exp' => $expirationTime,
@@ -100,7 +100,7 @@ if ($method =="POST"){
                     echo json_encode([
                         'message' => 'Login exitoso',
                         'token' => $jwt,
-                        'user' => $user
+                        'user' => $user['user']
                     ]);
                     exit;
                 }else {

@@ -36,3 +36,4 @@ getUserPosts:
     Cuando un usuario entra al perfil de otro.
 
     Mostrar publicaciones propias.
+
