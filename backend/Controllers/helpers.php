@@ -1,4 +1,7 @@
 <?php
+$secretKey = "contraseña"; 
+$expirationTime = time() + 3600; // 1 hora
+
     //Funcion que verifica si los input estan completos
     // $campos es un array con los valores de los input 
     function required_fields($data, $campos){
