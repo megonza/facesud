@@ -23,7 +23,7 @@ const Register = () => {
             const response = await fetch('api/userController.php', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ action: 'register' , name, email, password, member_num: memberNum })
+                body: JSON.stringify({ action: 'register' , name, email, password, confirmPassword, member_num: memberNum })
             });
 
 
