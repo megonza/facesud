@@ -61,7 +61,7 @@ if ($method === "POST") {
             $result = ["error" => "Se requiere el ID del post"];
             break;
             }
-            $result = Post::get_post($data['post_id'], $conn);
+            $result = Post::get_post($data['post_id'], $conn, $user_id);
             http_response_code($result['success'] ? 200 : 404);
             break;
 
@@ -74,7 +74,7 @@ if ($method === "POST") {
             break;
 
         case "getAllPost":
-            $result = Post::getAllPost($conn);
+            $result = Post::getAllPost($conn, $user_id);
             http_response_code($result['success'] ? 200 : 500);
             break;
 

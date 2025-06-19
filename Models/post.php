@@ -26,11 +26,15 @@ class Post {
         }
     }
     //obtener un post de un usuario
-    public static function get_post($post_id, $conn){
+    public static function get_post($post_id, $conn, $user_id){
         try{
             $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.name AS author 
                                     COUNT(DISTINCT pl.like_id) AS likes_count,
-                                    COUNT(DISTINCT c.comments_id) AS comments_count 
+                                    COUNT(DISTINCT c.comments_id) AS comments_count ,
+                                    EXISTS (
+                                            SELECT 1 FROM post_likes 
+                                            WHERE post_id = p.post_id AND user_id = ?
+                                            ) AS has_liked
                                     FROM posts p 
                                     JOIN users u ON p.user_id = u.user_id 
                                     LEFT JOIN post_likes pl ON p.post_id = pl.post_id
@@ -38,7 +42,7 @@ class Post {
                                     WHERE p.post_id = ?
                                     GROUP BY p post_id");
                                     
-            $stmt->execute([$post_id]);
+            $stmt->execute([$user_id, $post_id]);
             $post = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if($post){
@@ -64,7 +68,11 @@ class Post {
         try{
             $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.user_id AS Author,
                                     COUNT(DISTINCT pl.like_id) AS likes_count,
-                                    COUNT(DISTINCT c.comments_id) AS comments_count 
+                                    COUNT(DISTINCT c.comments_id) AS comments_count,
+                                    EXISTS (
+                                        SELECT 1 FROM post_likes 
+                                        WHERE post_id = p.post_id AND user_id = ?
+                                        ) AS has_liked
                                     FROM posts p
                                     JOIN users u ON p.user_id=u.user_id
                                     LEFT JOIN post_likes pl ON p.post_id = pl.post_id
@@ -72,7 +80,7 @@ class Post {
                                     WHERE p.user_id = ?
                                     GROUP BY p.post_id
                                     ORDER BY p.date_posted DESC");
-            $stmt->execute([$user_id]);
+            $stmt->execute([$user_id, $user_id]);
             $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             return [
@@ -87,11 +95,15 @@ class Post {
         }
     }
     //mostrar todos los posts de todos los usuarios
-    public static function getAllPost($conn){
+    public static function getAllPost($conn, $user_id){
         try{
             $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.user_id, u.name AS Author_name,
                                     COUNT(DISTINCT pl.like_id) AS likes_count,
-                                    COUNT(DISTINCT c.comments_id) AS comments_count 
+                                    COUNT(DISTINCT c.comments_id) AS comments_count,
+                                    EXISTS (
+                                            SELECT 1 FROM post_likes 
+                                            WHERE post_id = p.post_id AND user_id = ?
+                                            ) AS has_liked
                                     FROM posts p
                                     JOIN users u ON p.user_id = u.user_id
                                     LEFT JOIN post_likes pl ON p.post_id = pl.post_id
@@ -99,7 +111,7 @@ class Post {
                                     GROUP BY p.post_id
                                     ORDER BY p.date_posted DESC");
 
-            $stmt->execute();
+            $stmt->execute([$user_id]);
             $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             return [
