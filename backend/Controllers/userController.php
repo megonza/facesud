@@ -84,7 +84,10 @@ if ($method =="POST"){
     
                 $user = $userModel->login($data['email'], $data['password']);
                 
-                if(!isset($user['error'])){
+                var_dump($user); 
+                exit;
+
+                if(isset($user['user'])){
                     $payload =[
                         'iat' => time(),
                         'exp' => $expirationTime,
