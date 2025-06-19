@@ -31,3 +31,34 @@
 .btn-register:hover {
     outline: 1px solid #006184;
 }
+/*---------- USER NAVBAR SECTION ----------*/
+/*----- Navigation -----*/
+.navbar-navigation {
+    margin-top: 15px;
+}
+.navbar-navigation a {
+    display: inline-flex;
+    margin: 0px 25px 0px 25px;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 10px;
+    color: #9a9a9a;
+}
+.navbar-navigation a:hover {
+    background-color: #fff;
+}
+.navbar-navigation svg {
+    border-radius: 10px;
+}
+/*----- Account -----*/
+.navbar-account {
+    margin-top: 10px;
+}
+.navbar-account span {
+    display: inline-flex;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 100%;
+    background-color: #ccc;
+    cursor: pointer;
+}
