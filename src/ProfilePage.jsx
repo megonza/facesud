@@ -1,6 +1,45 @@
+import { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 
 function ProfilePage() {
+    // States for loading profiles
+    const [profile, setProfile] = useState('');
+
+    useEffect(() => {
+    // Function for fetching profile info
+    const fetchProfile = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('No se encontró el token.');
+            return;
+        }
+
+        try {
+            const response = await fetch('api/userController.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json',
+                    'Authorization':`Bearer ${token}`
+                },
+                body: JSON.stringify({ action: 'profile' })
+            });
+
+            const text = await response.text();
+            const data = JSON.parse(text);
+
+            if (response.ok) {
+                setProfile(data.user)
+            } else {
+                console.error(data.message);
+            }
+        } catch (error) {
+            console.error('Hubo un error al cargar el perfil: ', error);
+        }
+    };
+    fetchProfile();
+    }, []);
+
+    // HTML Return
     return(
         <div>
             <Navbar />
@@ -12,7 +51,7 @@ function ProfilePage() {
                             <img src="/img/default-profile-image.jpg" alt="pfp image" />
                         </div>
                     </div>
-                    <h2>Nombre de la persona</h2>
+                    <h2>{profile.name}</h2>
                     <div className="division-line"></div>
                     <ul className="banner-tabs">
                         <li>Información</li>

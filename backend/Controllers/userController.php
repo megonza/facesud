@@ -83,9 +83,6 @@ if ($method =="POST"){
                 }
     
                 $user = $userModel->login($data['email'], $data['password']);
-                
-                var_dump($user); 
-                exit;
 
                 if(isset($user['user'])){
                     $payload =[
@@ -122,7 +119,7 @@ if ($method =="POST"){
                 }
                 
 
-                try{
+                try {
                     $decoded = JWT::decode($jwt, new Key($secretKey, 'HS256'));
                     $id = $decoded->data->id;
 

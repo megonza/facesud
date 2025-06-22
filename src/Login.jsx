@@ -21,6 +21,7 @@ const Login = () => {
             const data = JSON.parse(text);
 
             if (response.ok) {
+                localStorage.setItem('token', data.token);
                 alert('Inicio de sesión exitoso.');
                 window.location.href = '/index.html';
             } else {
