@@ -34,7 +34,7 @@ $expirationTime = time() + 3600; // 1 hora
     function getTokensHeader(){
         $headers = getallheaders();
         if(isset($headers['Authorization'])){
-            return trim(str_replace('Bearer', '', $headers['Authorization']));
+            return trim(str_replace('Bearer', ' ', $headers['Authorization']));
         }
         return null;
     }

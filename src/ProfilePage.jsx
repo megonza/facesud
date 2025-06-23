@@ -15,7 +15,7 @@ function ProfilePage() {
         }
 
         try {
-            const response = await fetch('api/userController.php', {
+            const response = await fetch('http://localhost/facesud/backend/Controllers/userController.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json',
@@ -28,7 +28,7 @@ function ProfilePage() {
             const data = JSON.parse(text);
 
             if (response.ok) {
-                setProfile(data.user)
+                setProfile(data.user);
             } else {
                 console.error(data.message);
             }
@@ -100,7 +100,7 @@ function ProfilePage() {
                     <div className="post-item">
                         <span className="post-user">
                             <img src="img/default-profile-image.jpg" alt="" />
-                            <h4>Nombre de la persona</h4>
+                            <h4>{profile.name}</h4>
                             <p>hace cuánto tiempo</p>
                         </span>
                         <p>Este item es un post, puede incluir texto, imágenes, videos, etc.</p>
@@ -128,7 +128,7 @@ function ProfilePage() {
                     <div className="post-item">
                         <span className="post-user">
                             <img src="img/default-profile-image.jpg" alt="" />
-                            <h4>Nombre de la persona</h4>
+                            <h4>{profile.name}</h4>
                             <p>hace cuánto tiempo</p>
                         </span>
                         <p>Este item es un post, puede incluir texto, imágenes, videos, etc.</p>
