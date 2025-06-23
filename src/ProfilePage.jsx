@@ -15,7 +15,7 @@ function ProfilePage() {
         }
 
         try {
-            const response = await fetch('http://localhost/facesud/backend/Controllers/userController.php', {
+            const response = await fetch('api/userController.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json',
