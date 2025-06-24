@@ -33,10 +33,8 @@ $expirationTime = time() + 3600; // 1 hora
     //REutilizable para otros metodos (create_post, edit_profile)
     function getTokensHeader(){
         $headers = getallheaders();
-        foreach ($headers as $key => $value) {
-            if (strtolower($key) === 'authorization') {
-                return trim(str_replace('Bearer', '', $value));
-            }
+        if(isset($headers['Authorization'])){
+            return trim(str_replace('Bearer', ' ', $headers['Authorization']));
         }
         return null;
     }

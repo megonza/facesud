@@ -8,8 +8,6 @@ header("Access-Control-Allow-Credentials: true");
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    $raw = file_get_contents('php://input');
-    error_log("Cuerpo recibido: " . $raw);
     http_response_code(200);
     exit();
 }
@@ -114,7 +112,6 @@ if ($method =="POST"){
                 break;
                 
             case 'profile':
-                error_log("Entró al case 'profile'");
                 $jwt = getTokensHeader();
                 if(!$jwt){
                     http_response_code(400);
