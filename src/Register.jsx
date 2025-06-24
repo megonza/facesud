@@ -28,7 +28,6 @@ const Register = () => {
 
 
             const text = await response.text(); 
-            console.log("Respuesta completa:", text); 
             const data = JSON.parse(text); 
 
             if (response.ok) {
