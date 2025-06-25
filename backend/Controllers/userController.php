@@ -139,6 +139,7 @@ if ($method =="POST"){
                 break;
     }
     if (isset($result)) {
+        error_log("Resultado final: " . json_encode($result));
         echo json_encode($result);
     }
 }else {
