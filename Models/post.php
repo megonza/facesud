@@ -146,5 +146,31 @@ class Post {
             return ["success" => false, "message" => "Error al editar el post: " . $e->getMessage()];
         }
     }
+    //elkiminar los posteos
+    public static function deletePost($post_id, $user_id, $conn){
+        try{
+            $stmt = $conn->prepare("SELECT post_id, user_id FROM posts WHERE post_id =? AND user_id=?");
+            $stmt->execute([$post_id, $user_id]);
+            $post = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if(!$post){
+                return ["success" => false, "message" => "No tenés permiso para eliminar este post"];
+            }
+
+            //por si el post tiene imagen
+            if(!empty($post['image_path'])){
+                $imageFullPath = __DIR__ . '/../' . $post['image_path'];
+                if(file_exists($imageFullPath)){
+                    unlink($imageFullPath);
+                }
+            }
+            //eliminar post
+            $stmt = $conn->prepare("DELETE FROM posts WHERE post_id = ?");
+            $stmt->execute([$post_id]);
+            return ["success" => true, "message" => "Post eliminado exitosamente"];
+        }catch(PDOException $e){
+            return ["success" => false, "message" => "Error al eliminar el post: " . $e->getMessage()];
+        }
+    }
 }
 ?>
