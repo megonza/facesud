@@ -73,12 +73,12 @@ if ($method === "POST") {
 
             if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK){
                 $image_name = uniqid() . "_" . basename($_FILES['image']['name']);
-                $uplaod_dir = __DIR__ . '/../uploads/';
-                if (!is_dir($uplaod_dir)) mkdir($uplaod_dir);
-                $upload_path = $uplaod_dir . $image_name;
+                $upload_dir = __DIR__ . '/../uploads/';
+                if (!is_dir($upload_dir)) mkdir($upload_dir);
+                $upload_path = $upload_dir . $image_name;
 
                 if(move_uploaded_file($_FILES['image']['tmp_name'], $upload_path)){
-                    $upload_path = 'uploads/' . $image_name;
+                    $image_path = 'uploads/' . $image_name;
                 }else{
                     http_response_code(500);
                     $result = ["error" => "Error al subir la imagen"];
@@ -111,6 +111,36 @@ if ($method === "POST") {
         case "getAllPost":
             $result = Post::getAllPost($conn, $user_id);
             http_response_code($result['success'] ? 200 : 500);
+            break;
+
+        case "edit_post":
+            //verificar
+            if (empty($_POST['post_id']) || empty($_POST['text'])) {
+            http_response_code(400);
+            $result = ["error" => "Faltan campos obligatorios"];
+            break;
+            }
+
+            $post_id = $_POST['post_id'];
+            $text = $_POST['text'];
+            $image_path = null;
+
+            if(isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK){
+                $upload_dir = __DIR__ . '/../uploads/';
+                if(!is_dir($upload_dir)) mkdir($upload_dir, '0755', true);
+                $filename = uniqid(). "_" . basename($_FILES['image']['name']);
+                $destination = $upload_dir . $filename;
+
+                if(move_uploaded_file($_FILES['image']['tmp_name'], $destination)){
+                    $image_path = 'uploads/' . $filename;
+                }else{
+                    http_response_code(500);
+                    $result = ["error" => "No se pudo subir la imagen"];
+                    break;
+                }
+                }
+            $result = Post::editPost($post_id, $user_id, $text, $image_path, $conn);
+            http_response_code($result['success'] ? 200 : 403);
             break;
 
         default:

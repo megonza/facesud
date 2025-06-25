@@ -125,5 +125,26 @@ class Post {
             ];
         }
     }
+    //editar los posteos
+    public static function editPost($post_id,$user_id, $text, $image_path, $conn){
+        try{
+            //Se verifica que el usuario sea autor del post
+            $stmt = $conn->prepare("SELECT * FROM posts WHERE post_id = ? AND user_id=?");
+            $stmt->execute([$post_id, $user_id]);
+            $post = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if(!$post){
+                return ["success" => false, "message" => "No tenés permiso para editar este post"];
+            }
+
+            //Editar post
+            $query = "UPDATE posts SET text =?, image_path = ? WHERE post_id=?";
+            $stmt = $conn->prepare($query);
+            $stmt->execute([$text, $image_path, $post_id]);
+            return ["success" => true, "message" => "Post editado correctamente"];
+        }catch(PDOException $e){
+            return ["success" => false, "message" => "Error al editar el post: " . $e->getMessage()];
+        }
+    }
 }
 ?>

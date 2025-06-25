@@ -67,4 +67,5 @@ Endpoints (action) y descripción:
 |create_post_with_image| Crear una publicación con imagen (multipart/form-data)|
 |get_post| Obtener un post por su ID|
 |getUserPosts|Obtener todos los posts de un usuario específico|
-|getAllPosts|Obtener todos los posts del sistema, con datos de autor, likes, etc
+|getAllPosts|Obtener todos los posts del sistema, con datos de autor, likes, etc|
+|edit_post| Editar publicación|
