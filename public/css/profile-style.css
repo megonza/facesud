@@ -36,7 +36,7 @@ body {
 }
 .banner-pfp {
     position: absolute;
-    bottom: 350px;
+    bottom: 260px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -95,6 +95,7 @@ body {
     box-shadow: 2px 2px 2px #ccc;
 }
 .card-item span {
+    display: inline-flex;
     margin: 5px;
     color: #9a9a9a;
 }
@@ -138,8 +139,22 @@ body {
     display: flex;
 }
 .post-interact span {
-   margin: 5px;
+    display: inline-flex;
+    color: #9a9a9a;
+    margin: 5px;
 }
 .post-interact p {
     display: inline;
+}
+.interact-like svg, .interact-comment svg, .interact-share svg {
+    cursor: pointer;
+}
+.interact-like svg:hover {
+    color: #c3063f;
+}
+.interact-comment svg:hover {
+    color: #007da5;
+}
+.interact-share svg:hover {
+    color: #25b247;
 }
