@@ -9,6 +9,7 @@
 .navbar-container {
     display: flex;
     justify-content: space-between;
+    background-color: #006184;
 }
 .navbar-options button {
     border: none;
@@ -30,4 +31,39 @@
 }
 .btn-register:hover {
     outline: 1px solid #006184;
+}
+/*---------- USER NAVBAR SECTION ----------*/
+/*----- Navigation -----*/
+.navbar-navigation {
+    margin-top: 15px;
+}
+.navbar-navigation a {
+    display: inline-flex;
+    margin: 0px 25px 0px 25px;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 10px;
+    color: #fff;
+}
+.navbar-navigation a:hover {
+    background-color: #007da5;
+}
+.navbar-navigation svg {
+    border-radius: 10px;
+}
+/*----- Account -----*/
+.navbar-account {
+    display: flex;
+    margin-top: 10px;
+}
+.account-item {
+    display: inline-flex;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 100%;
+    background-color: #fff;
+    cursor: pointer;
+}
+.notification-container {
+    position: relative;
 }
