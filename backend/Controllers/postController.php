@@ -142,7 +142,19 @@ if ($method === "POST") {
             $result = Post::editPost($post_id, $user_id, $text, $image_path, $conn);
             http_response_code($result['success'] ? 200 : 403);
             break;
+        
+        case 'delete_post': 
+            if(empty($_POST['post_id'])){
+                http_response_code(400);
+                $result = ["error" => "Falta el ID del post"];
+                break;
+            }
 
+            $post_id = $_POST['post_id'];
+
+            $result = Post::deletePost($post_id, $user_id, $conn);
+            http_response_code($result['success'] ? 200 : 403);
+            break;
         default:
             http_response_code(400);
             $result = ["error" => "Accion invalida"];
