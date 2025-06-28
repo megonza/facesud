@@ -1,7 +1,45 @@
+import { useState, useEffect } from 'react';
 import Navbar from './Navbar';
-import PostItem from './PostItem';
 
 function ProfilePage() {
+    // States for loading profiles
+    const [profile, setProfile] = useState('');
+
+    useEffect(() => {
+    // Function for fetching profile info
+    const fetchProfile = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('No se encontró el token.');
+            return;
+        }
+
+        try {
+            const response = await fetch('api/userController.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json',
+                    'Authorization':`Bearer ${token}`
+                },
+                body: JSON.stringify({ action: 'profile' })
+            });
+
+            const text = await response.text();
+            const data = JSON.parse(text);
+
+            if (response.ok) {
+                setProfile(data.user);
+            } else {
+                console.error(data.message);
+            }
+        } catch (error) {
+            console.error('Hubo un error al cargar el perfil: ', error);
+        }
+    };
+    fetchProfile();
+    }, []);
+
+    // HTML Return
     return(
         <div>
             <Navbar />
@@ -13,7 +51,7 @@ function ProfilePage() {
                             <img src="/img/default-profile-image.jpg" alt="pfp image" />
                         </div>
                     </div>
-                    <h2>Nombre de la persona</h2>
+                    <h2>{profile.name}</h2>
                     <div className="division-line"></div>
                     <ul className="banner-tabs">
                         <li>Información</li>
@@ -32,24 +70,9 @@ function ProfilePage() {
                     </div>
                     <div className="card-item">
                         <h3>Informacion de miembro</h3>
-                        <span>
-                            <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 20v-9l-4 1.125V20h4Zm0 0h8m-8 0V6.66667M16 20v-9l4 1.125V20h-4Zm0 0V6.66667M18 8l-6-4-6 4m5 1h2m-2 3h2"/>
-                            </svg>
-                            Asiste a Rama Zeballos
-                        </span>
-                        <span>
-                            <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" strokeLinejoin="round" strokeWidth="2" d="M12.1429 11v9m0-9c-2.50543-.7107-3.19099-1.39543-6.13657-1.34968-.48057.00746-.86348.38718-.86348.84968v7.2884c0 .4824.41455.8682.91584.8617 2.77491-.0362 3.45995.6561 6.08421 1.3499m0-9c2.5053-.7107 3.1067-1.39542 6.0523-1.34968.4806.00746.9477.38718.9477.84968v7.2884c0 .4824-.4988.8682-1 .8617-2.775-.0362-3.3758.6561-6 1.3499m2-14c0 1.10457-.8955 2-2 2-1.1046 0-2-.89543-2-2s.8954-2 2-2c1.1045 0 2 .89543 2 2Z"/>
-                            </svg>
-                            Tiene el llamamiento de Presbítero
-                        </span>
-                        <span>
-                            <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 9h3m-3 3h3m-3 3h3m-6 1c-.306-.613-.933-1-1.618-1H7.618c-.685 0-1.312.387-1.618 1M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
-                            </svg>
-                            Ha servido en la Misión en Seúl, Corea del Sur
-                        </span>
+                        <p>Esta tarjeta muestra varios datos configurados por el usuario respecto a su
+                            status de miembro, incluyendo sus mandamientos.
+                        </p>
                     </div>
                     <div className="card-item">
                         <h3>Próximos eventos donde asistirá</h3>
@@ -74,8 +97,62 @@ function ProfilePage() {
                     </div>
                 </aside>
                 <main className="posts-container">
-                    <PostItem />
-                    <PostItem />
+                    <div className="post-item">
+                        <span className="post-user">
+                            <img src="img/default-profile-image.jpg" alt="" />
+                            <h4>{profile.name}</h4>
+                            <p>hace cuánto tiempo</p>
+                        </span>
+                        <p>Este item es un post, puede incluir texto, imágenes, videos, etc.</p>
+                        <div className="post-interact">
+                            <span className="interact-like">
+                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                                </svg>
+                                <p>39</p>
+                            </span>
+                            <span className="interact-comment">
+                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
+                                </svg>
+                                <p>7</p>
+                            </span>
+                            <span className="interact-share">
+                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M7.926 10.898 15 7.727m-7.074 5.39L15 16.29M8 12a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm12 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm0-11a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+                                </svg>
+                                <p>2</p>
+                            </span>
+                        </div>
+                    </div>
+                    <div className="post-item">
+                        <span className="post-user">
+                            <img src="img/default-profile-image.jpg" alt="" />
+                            <h4>{profile.name}</h4>
+                            <p>hace cuánto tiempo</p>
+                        </span>
+                        <p>Este item es un post, puede incluir texto, imágenes, videos, etc.</p>
+                        <div className="post-interact">
+                            <span className="interact-like">
+                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                                </svg>
+                                22
+                            </span>
+                            <span className="interact-comment">
+                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
+                                </svg>
+                                0
+                            </span>
+                            <span className="interact-share">
+                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M7.926 10.898 15 7.727m-7.074 5.39L15 16.29M8 12a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm12 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm0-11a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+                                </svg>
+                                0
+                            </span>
+                        </div>
+                    </div>
                 </main>
             </section>
         </div>

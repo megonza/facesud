@@ -20,13 +20,16 @@ const Register = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/userController.php', {
+            const response = await fetch('api/userController.php', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ name, email, password, memberNum })
+                body: JSON.stringify({ action: 'register' , name, email, password, confirmPassword, member_num: memberNum })
             });
 
-            const data = await response.json();
+
+            const text = await response.text(); 
+            console.log("Respuesta completa: ", text);
+            const data = JSON.parse(text); 
 
             if (response.ok) {
                 setSuccess('¡Registrado con éxito! Ya puedes iniciar sesión.');
