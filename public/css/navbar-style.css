@@ -56,7 +56,7 @@
     display: flex;
     margin-top: 10px;
 }
-.navbar-account span {
+.account-item {
     display: inline-flex;
     margin: 5px;
     padding: 10px;
