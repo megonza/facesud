@@ -25,10 +25,11 @@ function ProfilePage() {
             });
 
             const text = await response.text();
+            console.log("Texto recibido:", text);
             const data = JSON.parse(text);
 
             if (response.ok) {
-                setProfile(data.user);
+                setProfile(data.data);
             } else {
                 console.error(data.message);
             }
