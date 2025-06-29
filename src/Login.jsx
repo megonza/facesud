@@ -17,13 +17,14 @@ const Login = () => {
             });
 
             const text = await response.text();
-            console.log("Respuesta completa: ", text);
+            if (!text) throw new Error('Respuesta vacía del servidor.');
             const data = JSON.parse(text);
+            console.log("Datos recibidos:", data);
 
             if (response.ok) {
                 localStorage.setItem('token', data.token);
                 alert('Inicio de sesión exitoso.');
-                window.location.href = '/index.html';
+                window.location.href = '/profile';
             } else {
                 alert(data.message);
             }
