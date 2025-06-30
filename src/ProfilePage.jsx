@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Navbar from './Navbar';
+import CreatePost from './CreatePost';
 
 function ProfilePage() {
     // States for loading profiles
@@ -25,7 +26,6 @@ function ProfilePage() {
             });
 
             const text = await response.text();
-            console.log("Texto recibido:", text);
             const data = JSON.parse(text);
 
             if (response.ok) {
@@ -39,6 +39,11 @@ function ProfilePage() {
     };
     fetchProfile();
     }, []);
+
+    //Function for opening 'create post' modal
+    //States for showing modal
+    const [showModal, setShowModal] = useState(false);
+
 
     // HTML Return
     return(
@@ -154,6 +159,14 @@ function ProfilePage() {
                             </span>
                         </div>
                     </div>
+                    <div className='btn-createpost' onClick={() => setShowModal(true)}>
+                        <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 5V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M9 3v4a1 1 0 0 1-1 1H4m11.383.772 2.745 2.746m1.215-3.906a2.089 2.089 0 0 1 0 2.953l-6.65 6.646L9 17.95l.739-3.692 6.646-6.646a2.087 2.087 0 0 1 2.958 0Z"/>
+                        </svg>
+                    </div>
+                    {showModal && (
+                        <CreatePost onClose={() => setShowModal(false)}/>
+                    )}
                 </main>
             </section>
         </div>
