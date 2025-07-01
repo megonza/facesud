@@ -5,7 +5,7 @@
     box-sizing: border-box;
 }
 
-/*---------- NAVBAR SECTION ----------*/
+/*---------- GUEST NAVBAR SECTION ----------*/
 .navbar-container {
     display: flex;
     justify-content: space-between;
@@ -19,18 +19,18 @@
     border-radius: 7px;
 }
 .btn-login {
-    color: #fff;
-    background-color: #006184;
+    color: #006184;
+    background-color: #fff;
 }
 .btn-login:hover {
-    background-color: #007da5;
+    background-color: #ccc;
 }
 .btn-register {
-    color: #006184;
+    color: #fff;
     background: none;
 }
 .btn-register:hover {
-    outline: 1px solid #006184;
+    outline: 1px solid #fff;
 }
 /*---------- USER NAVBAR SECTION ----------*/
 /*----- Navigation -----*/

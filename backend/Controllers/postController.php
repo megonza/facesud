@@ -57,7 +57,7 @@ if ($method === "POST") {
                 break;
             }
 
-            $result = POST::createPost($user_id,$data["text"],$conn);
+            $result = Post::createPost($user_id,$data["text"],$conn);
             http_response_code($result['success'] ? 201 : 500);
             break;
 
