@@ -16,6 +16,7 @@ function NotificationPanel({ onClose }) {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [onClose]);
 
+    // HTML Return
     return (
         <div className="notification-panel" ref={panelRef}>
             <h4>Notificaciones</h4>

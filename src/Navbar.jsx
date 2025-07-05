@@ -1,10 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import NotificationPanel from './NotificationPanel';
+import AccountPanel from './AccountPanel';
 
 function Navbar() {
-    //State for showing Notification panel
+    //State for showing panels
     const [showNotifPanel, setShowNotifPanel] = useState(false);
+    const [showAccPanel, setShowAccPanel] = useState(false);
     const bellRef = useRef(null);
+    const accRef = useRef(null);
+
     //State for checking token and changing navbar (user or guest)
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -12,6 +16,12 @@ function Navbar() {
         const token = localStorage.getItem("token");
         setIsLoggedIn(!!token); // True if there's token, false if not
     }, []);
+
+    //Function for handling logout
+    const handleLogout = ()=> {
+        localStorage.removeItem('token');
+        window.location.href = '/auth';
+    }
 
     return (
         <nav>
@@ -59,11 +69,15 @@ function Navbar() {
                                 </svg>
                             </span>
                         </div>
-                        <div className='profile-container'>
-                            <span className="account-item">
+                        <div className='profile-container' ref={accRef}>
+                            <span className="account-item" onClick={() => setShowAccPanel(prev => !prev)}>
                                 <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                                 </svg>
+                                {showAccPanel && <AccountPanel
+                                     onClose={() => setShowAccPanel(false)}
+                                     onLogout={(handleLogout)}
+                                />}
                             </span>
                         </div>
                     </div>
