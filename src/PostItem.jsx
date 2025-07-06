@@ -1,13 +1,13 @@
-function PostItem() {
+function PostItem({ post }) {
     return (
         <div>
             <div className="post-item">
                 <span className="post-user">
                     <img src="img/default-profile-image.jpg" alt="" />
                     <h4>Nombre de la persona</h4>
-                    <p>hace cuánto tiempo</p>
+                    <p>{new Date(post.date_posted).toLocaleString()}</p>
                 </span>
-                <p>Este item es un post, puede incluir texto, imágenes, videos, etc.</p>
+                <p>{post.text}</p>
                 <div className="post-interact">
                     <span className="interact-like">
                         <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">

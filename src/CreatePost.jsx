@@ -27,7 +27,7 @@ function CreatePost({ onClose }) {
             if (response.ok) {
                 alert("Publicación creada con éxito.");
             } else {
-                alert(data.error || 'Error al crear la publicación.');
+                alert(data.message || 'Error al crear la publicación.');
             }
         } catch (error) {
             console.error("Error: ", error);

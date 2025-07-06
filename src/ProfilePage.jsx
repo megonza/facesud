@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import CreatePost from './CreatePost';
+import PostItem from './PostItem';
 
 function ProfilePage() {
-    // States for loading profiles
+    // States for loading profiles and posts
     const [profile, setProfile] = useState('');
+    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
     // Function for fetching profile info
@@ -16,7 +18,8 @@ function ProfilePage() {
         }
 
         try {
-            const response = await fetch('api/userController.php', {
+            // Get profile (for user_id)
+            const profileRes = await fetch('api/userController.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json',
@@ -25,13 +28,30 @@ function ProfilePage() {
                 body: JSON.stringify({ action: 'profile' })
             });
 
-            const text = await response.text();
-            const data = JSON.parse(text);
+            const profileData = await profileRes.json();
 
-            if (response.ok) {
-                setProfile(data.data);
+            if (profileRes.ok) {
+                setProfile(profileData.data);
             } else {
                 console.error(data.message);
+                return;
+            }
+
+            // Get user's posts
+            const postRes = await fetch('api/postController.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ action: 'getUserPost', user_id: profileData.data.user_id })
+            });
+
+            const postData = await postRes.json();
+            if (postRes.ok) {
+                setPosts(postData.data);
+            } else {
+                console.error('Error al obtener posts: ', postData.message);
             }
         } catch (error) {
             console.error('Hubo un error al cargar el perfil: ', error);
@@ -103,62 +123,15 @@ function ProfilePage() {
                     </div>
                 </aside>
                 <main className="posts-container">
-                    <div className="post-item">
-                        <span className="post-user">
-                            <img src="img/default-profile-image.jpg" alt="" />
-                            <h4>{profile.name}</h4>
-                            <p>hace cuánto tiempo</p>
-                        </span>
-                        <p>Este item es un post, puede incluir texto, imágenes, videos, etc.</p>
-                        <div className="post-interact">
-                            <span className="interact-like">
-                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
-                                </svg>
-                                <p>39</p>
-                            </span>
-                            <span className="interact-comment">
-                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
-                                </svg>
-                                <p>7</p>
-                            </span>
-                            <span className="interact-share">
-                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M7.926 10.898 15 7.727m-7.074 5.39L15 16.29M8 12a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm12 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm0-11a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
-                                </svg>
-                                <p>2</p>
-                            </span>
+                    {posts.length === 0 ? (
+                        <p>Este usuario aún no ha publicado nada.</p>
+                    ) : (
+                        <div className="post-list">
+                        {posts.map((post) => (
+                            <PostItem key={post.post_id} post={post} />
+                        ))}
                         </div>
-                    </div>
-                    <div className="post-item">
-                        <span className="post-user">
-                            <img src="img/default-profile-image.jpg" alt="" />
-                            <h4>{profile.name}</h4>
-                            <p>hace cuánto tiempo</p>
-                        </span>
-                        <p>Este item es un post, puede incluir texto, imágenes, videos, etc.</p>
-                        <div className="post-interact">
-                            <span className="interact-like">
-                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
-                                </svg>
-                                22
-                            </span>
-                            <span className="interact-comment">
-                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
-                                </svg>
-                                0
-                            </span>
-                            <span className="interact-share">
-                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M7.926 10.898 15 7.727m-7.074 5.39L15 16.29M8 12a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm12 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm0-11a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
-                                </svg>
-                                0
-                            </span>
-                        </div>
-                    </div>
+                    )}
                     <div className='btn-createpost' onClick={() => setShowModal(true)}>
                         <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 5V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M9 3v4a1 1 0 0 1-1 1H4m11.383.772 2.745 2.746m1.215-3.906a2.089 2.089 0 0 1 0 2.953l-6.65 6.646L9 17.95l.739-3.692 6.646-6.646a2.087 2.087 0 0 1 2.958 0Z"/>
