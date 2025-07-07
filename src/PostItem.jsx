@@ -4,7 +4,7 @@ function PostItem({ post }) {
             <div className="post-item">
                 <span className="post-user">
                     <img src="img/default-profile-image.jpg" alt="" />
-                    <h4>Nombre de la persona</h4>
+                    <h4>{post.Author_name}</h4>
                     <p>{new Date(post.date_posted).toLocaleString()}</p>
                 </span>
                 <p>{post.text}</p>
