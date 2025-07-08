@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import CreatePost from './CreatePost';
 import PostItem from './PostItem';
 
 function ProfilePage() {
-    // States for loading profiles and posts
-    const [profile, setProfile] = useState('');
+    // States for loading profiles and posts, and getting user_id from URL
+    const { userId } = useParams();
+    const [profile, setProfile] = useState(null);
     const [posts, setPosts] = useState([]);
 
     useEffect(() => {
@@ -18,47 +20,52 @@ function ProfilePage() {
         }
 
         try {
-            // Get profile (for user_id)
-            const profileRes = await fetch('api/userController.php', {
+            // If profile is the user's own, use action: 'profile'
+            let profileData;
+            if (!userId) {
+                const response = await fetch('api/userController.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':'application/json',
+                        'Authorization':`Bearer ${token}`
+                    },
+                    body: JSON.stringify({ action: 'profile' })
+                });
+                const data = await response.json();
+                profileData = data.data;
+            } else {
+                // Get another user's profile
+                const response = await fetch('api/userController.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':'application/json',
+                        'Authorization':`Bearer ${token}`
+                    },
+                    body: JSON.stringify({ action: 'get_user', userId: userId })
+                });
+                const data = await response.json();
+                profileData = data.data;
+            }
+
+            setProfile(profileData);
+
+            // Fetch posts from found profile
+            const postsRes = await fetch('api/postController.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json',
                     'Authorization':`Bearer ${token}`
                 },
-                body: JSON.stringify({ action: 'profile' })
+                body: JSON.stringify({ action: 'getUserPost', user_id: userId || profileData.user_id })
             });
-
-            const profileData = await profileRes.json();
-
-            if (profileRes.ok) {
-                setProfile(profileData.data);
-            } else {
-                console.error(data.message);
-                return;
-            }
-
-            // Get user's posts
-            const postRes = await fetch('api/postController.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ action: 'getUserPost', user_id: profileData.data.user_id })
-            });
-
-            const postData = await postRes.json();
-            if (postRes.ok) {
-                setPosts(postData.data);
-            } else {
-                console.error('Error al obtener posts: ', postData.message);
-            }
+            const postData = await postsRes.json();
+            setPosts(postData.data);
         } catch (error) {
             console.error('Hubo un error al cargar el perfil: ', error);
         }
     };
     fetchProfile();
-    }, []);
+    }, [userId]);
 
     //Function for opening 'create post' modal
     //States for showing modal

@@ -10,6 +10,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <Routes>
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/profile/:userId" element={<ProfilePage />} />
       <Route path="/auth" element={<Auth />} />
       <Route path="/home" element={<Home />}/>
     </Routes>   
