@@ -14,17 +14,22 @@
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
-.notification-panel h4 {
+.notification-panel h2 {
     margin: 15px;
 }
 .notification-filters {
     display: flex;
+    text-align: center;
 }
 .notification-filters span {
-    background-color: #ccc;
+    background-color: #ddd;
     border-radius: 10px;
     margin: 5px;
     padding: 5px;
+    width: 105px;
+}
+.notification-filters span:hover {
+    background-color: #ccc;
 }
 .notification-panel li {
     list-style: none;

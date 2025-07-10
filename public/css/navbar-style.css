@@ -51,6 +51,12 @@
 .navbar-navigation svg {
     border-radius: 10px;
 }
+
+.active {
+    background-color: #007da5;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    border-bottom: 5px solid #fff;
+}
 /*----- Account -----*/
 .navbar-account {
     display: flex;

@@ -19,10 +19,10 @@ function NotificationPanel({ onClose }) {
     // HTML Return
     return (
         <div className="notification-panel" ref={panelRef}>
-            <h4>Notificaciones</h4>
+            <h2>Notificaciones</h2>
             <div className="notification-filters">
                 <span>Todos</span>
-                <span>Me gusta</span>
+                <span>Me Gusta</span>
                 <span>Comentarios</span>
                 <span>Solicitudes</span>
             </div>
