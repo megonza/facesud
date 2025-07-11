@@ -20,7 +20,7 @@ function CreatePost({ onClose }) {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ action: 'create_post', text: postText })
+                body: JSON.stringify({ action: 'create_post', text: postText }  )
             });
 
             const data = await response.json();

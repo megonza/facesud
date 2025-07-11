@@ -24,7 +24,7 @@ const Login = () => {
             if (response.ok) {
                 localStorage.setItem('token', data.token);
                 alert('Inicio de sesión exitoso.');
-                window.location.href = '/profile';
+                window.location.href = '/home';
             } else {
                 alert(data.message);
             }
