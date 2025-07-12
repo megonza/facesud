@@ -4,12 +4,11 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../Models/post.php';
+require_once __DIR__ . '/../Models/comment.php';
 require_once 'helpers.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
-
-
-
+use Dom\Comment;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
@@ -155,6 +154,63 @@ if ($method === "POST") {
             $result = Post::deletePost($post_id, $user_id, $conn);
             http_response_code($result['success'] ? 200 : 403);
             break;
+
+        case 'like_post':
+            if(empty($data['post_id'])){
+                http_response_code(400);
+                $result = ["success" => false, "message" => "falta un post_id"];
+                break;
+            }
+
+            $result = Post::likePost($user_id, $data['post_id'], $conn);
+            http_response_code($result['success'] ? 200 : 400);
+            break;
+
+        case "unlike_post":
+            if (empty($data['post_id'])) {
+                http_response_code(400);
+                $result = ["success" => false, "message" => "Falta post_id"];
+                break;
+            }
+
+            $result = Post::unlikePost($user_id, $data['post_id'], $conn);
+            http_response_code($result['success'] ? 200 : 400);
+            break;
+
+        case "add_comment":
+            if(empty($data['post_id']) || empty($data['text_comment'])){
+                http_response_code(400);
+                $result = ["success" => false, "message" => "Faltan post_id o comentario"];
+                break;
+            }
+
+            $result = Comments::addComments($user_id, $data['post_id'], $data['text_comment'], $conn);
+            http_response_code($result['success'] ? 201 :500);
+            break;
+        
+        case "get_comments":
+            if(empty($data['post_id'])){
+                http_response_code(400);
+                $result = ["success" => false, "message" => "Falta post_id"];
+                break;
+            }
+
+            $result = Comments::getComments($data['post_id'], $conn);
+            http_response_code($result['success'] ? 200 : 500);
+            break;
+
+        case "edit_comment":
+            if(empty($data['comments_id']) || empty($data['text_comment'])){
+                http_response_code(400);
+                $result = ["success" => false, "message" => "Faltan datos (comment_id o texto)"];
+                break;
+            }
+
+            $result = Comments::editComment($data['comments_id'], $user_id, $data['text_comment'], $conn);
+            http_response_code($result['success'] ? 200 : 403);
+            break;
+
+            
         default:
             http_response_code(400);
             $result = ["error" => "Accion invalida"];

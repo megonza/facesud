@@ -172,5 +172,29 @@ class Post {
             return ["success" => false, "message" => "Error al eliminar el post: " . $e->getMessage()];
         }
     }
+    //like a un posteo
+    public static function likePost($user_id, $post_id,$conn){
+        try{
+            //Evitar duplicado
+            $stmt = $conn->prepare("INSERT INTO post_likes (user_id, post_id) VALUES (?,?)");
+            $stmt->execute([$user_id, $post_id]);
+            return ['succes' => true, 'message' => "like agregado"];
+        }catch(PDOException $e){
+            if($e->getCode()==23000){
+                return ['succes'=>false,"message" => "Ya le diste like a este post"];
+            }
+            return ["success" => false, "message" => "Error al dar like: " . $e->getMessage()];
+        }
+    }
+    //quitar el like
+    public static function unlikePost($user_id,$post_id,$conn){
+        try{
+            $stmt = $conn->prepare("DELETE FROM post_likes WHERE post_id = ? AND user_id=?");
+            $stmt->execute([$post_id,$user_id]);
+            return ['success' => true, 'message'=>'Like eliminado'];
+        }catch(PDOException $e){
+            return ['success'=>false,'message'=>'Error al quitar like ' . $e->getMessage()];
+        }
+    }
 }
 ?>

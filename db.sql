@@ -28,13 +28,13 @@ CREATE TABLE IF NOT EXISTS comments(
     user_id INT NOT NULL,
     post_id INT NOT NULL,
     text_comment TEXT NOT NULL,
-    date_commented DATETIME TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_id) REFERENCES posts(post_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    date_commented TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 --TABLE  POST_LIKES (LIKES EN LOS POSTEOS)
-CREATE TABLE IF NOT EXISTS(
+CREATE TABLE IF NOT EXISTS post_likes(
     like_id INT PRIMARY KEY AUTOINCREMENT,
     user_id INT NOT NULL,
     post_id INT NOT NULL,

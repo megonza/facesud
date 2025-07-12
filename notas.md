@@ -1,11 +1,13 @@
 1 Validar datos del formulario
     Numero de miembro: SOLO Numero y solo 11 digitos
-    Contraseñas seguras
-    nombre usuario no repetido
-    
-2.Encapsular algunas funciones en otro archivo
 
-3. pedir en el register fecha de nacimiento para mandar alertas de cumpleaños
+3. pedir en el register fecha de nacimiento
+
+4. Agregar rRESPUESTAS a comentarios
+
+5 Agregar likes a comentarios
+
+6 A futurop: Emojis personalizados version sud
 -------------------------------------------------------------------------
 get_post:
 
