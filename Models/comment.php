@@ -17,7 +17,7 @@ class Comments{
         }
 
     }
-    //Mostrar comentario de un post
+    //Mostrar comentarios de un post
     public static function getComments($post_id, $conn){
         try{
             $stmt = $conn->prepare("SELECT c.comments_id, c.text_comment, c.date_commented, u.user_id AS user_name FROM comments c
@@ -37,7 +37,7 @@ class Comments{
             ];
         }
     }
-
+    //Editar comentario propio
     public static function editComment($comments_id, $user_id, $new_text_comment, $conn){
         try{
             // Verificar que el comentario le pertenezca al usuario
@@ -52,6 +52,24 @@ class Comments{
             return ["success" => true, "message" => "Comentario editado."];
         }catch(PDOException $e){
             return["success" => false, "message" => "No se pudo editar el comentario: " . $e->getMessage()];
+        }
+    }
+
+    public static function deleteComment($user_id, $comments_id, $conn){
+        try{
+            //verifica el dueño del comentario
+            $stmt = $conn->prepare("SELECT * FROM comments WHERE comments_id = ? AND user_id = ?");
+            $stmt->execute([$comments_id, $user_id]);
+            $comments = $stmt->fetch(PDO::FETCH_ASSOC);
+            if(!$comments){
+                return ["success" => false, "message" => "Sin autorizacion o comentario inexistente"];
+            }
+
+            $stmt = $conn->prepare("DELETE FROM comments WHERE comments_id = ?");
+            $stmt->execute([$comments_id]);
+            return ["success" => true, "message" => "Comentario eliminado"];
+        }catch(PDOException $e){
+            return['success' => false, "message" => "Error en la base de datos: ". $e->getMessage()];
         }
     }
 }

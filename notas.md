@@ -8,6 +8,10 @@
 5 Agregar likes a comentarios
 
 6 A futurop: Emojis personalizados version sud
+
+7 Comentarios con imagenes
+
+8 Añadir videos a los posts
 -------------------------------------------------------------------------
 get_post:
 

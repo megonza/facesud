@@ -210,7 +210,17 @@ if ($method === "POST") {
             http_response_code($result['success'] ? 200 : 403);
             break;
 
-            
+        case "delete_comment":
+            if(empty($data['comments_id'])){
+                http_response_code(400);
+                $result = ["error" => "Falta el ID del comentario"];
+                break;
+            }
+
+            $result = Comments::deleteComment($user_id, $data['comments_id'], $conn);
+            http_response_code($result['success'] ? 200 : 403);
+            break;
+
         default:
             http_response_code(400);
             $result = ["error" => "Accion invalida"];

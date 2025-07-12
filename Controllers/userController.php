@@ -113,8 +113,6 @@ if ($method =="POST"){
                     $result = ["success" => false, "message" => "Token no proporcionado"];
                     break;
                 }
-                
-
                 try{
                     $decoded = JWT::decode($jwt, new Key($secretKey, 'HS256'));
                     $id = $decoded->data->id;
@@ -126,6 +124,17 @@ if ($method =="POST"){
                         http_response_code(401);
                         $result = ["success" => false, "message" => "Token inválido o expirado". $e->getMessage()];
                 }
+                break;
+
+            case 'get_user_profile':
+                if(!isset($data['target_user_id'])){
+                    http_response_code(400);
+                    $result = ['success' => false, 'message' => 'Falta el ID del usuario a buscar'];
+                    break;
+                }
+
+                $result = $userModel->getUserByID($data['target_user_id'], $conn);
+                http_response_code($result['success'] ? 200 : 404);
                 break;
 
             default:
