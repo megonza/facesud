@@ -132,6 +132,16 @@ if ($method =="POST"){
                 }
                 break;
 
+            case 'get_user':
+                if (empty($data['user_id'])) {
+                    http_response_code(400);
+                    $result = ["success" => false, "message" => "Falta user_id"];
+                break;
+                }
+
+                $result = $userModel->getUserByID($data['user_id'], $conn);
+                http_response_code($result['success'] ? 200 : 404);
+                break;
             default:
                 http_response_code(400);
                 $result = ["error" => "Acción no válida"];

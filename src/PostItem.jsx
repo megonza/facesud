@@ -1,4 +1,5 @@
 function PostItem({ post }) {
+    console.log("Post recibido en PostItem:", post);
     return (
         <div>
             <div className="post-item">

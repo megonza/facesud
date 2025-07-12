@@ -31,7 +31,7 @@ function Navbar() {
         <nav>
             <div className="navbar-container">
                 <div className="navbar-logo">
-                    <img src="img/logo-temp-image.png" alt="Logo de la red social" />
+                    <img src="/img/logo-temp-image.png" alt="Logo de la red social" />
                 </div>
                 {!isLoggedIn ? (
                     <div className="navbar-options">

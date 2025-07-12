@@ -28,7 +28,7 @@ class Post {
     //obtener un post de un usuario
     public static function get_post($post_id, $conn, $user_id){
         try{
-            $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.name AS author 
+            $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.name AS Author_name 
                                     COUNT(DISTINCT pl.like_id) AS likes_count,
                                     COUNT(DISTINCT c.comments_id) AS comments_count ,
                                     EXISTS (
@@ -66,7 +66,7 @@ class Post {
     //obtener todos los post de un usuario
     public static function getUserPost($user_id, $conn){
         try{
-            $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.user_id AS Author,
+            $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.user_id, u.name AS Author_name,
                                     COUNT(DISTINCT pl.like_id) AS likes_count,
                                     COUNT(DISTINCT c.comments_id) AS comments_count,
                                     EXISTS (

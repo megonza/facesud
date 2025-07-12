@@ -3,12 +3,14 @@ import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import CreatePost from './CreatePost';
 import PostItem from './PostItem';
+import UserNotFound from './UserNotFound';
 
 function ProfilePage() {
     // States for loading profiles and posts, and getting user_id from URL
     const { userId } = useParams();
     const [profile, setProfile] = useState(null);
     const [posts, setPosts] = useState([]);
+    const [userNotFound, setUserNotFound] = useState(false);
 
     useEffect(() => {
     // Function for fetching profile info
@@ -23,7 +25,7 @@ function ProfilePage() {
             // If profile is the user's own, use action: 'profile'
             let profileData;
             if (!userId) {
-                const response = await fetch('api/userController.php', {
+                const response = await fetch('/api/userController.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type':'application/json',
@@ -35,22 +37,28 @@ function ProfilePage() {
                 profileData = data.data;
             } else {
                 // Get another user's profile
-                const response = await fetch('api/userController.php', {
+                const response = await fetch('/api/userController.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type':'application/json',
                         'Authorization':`Bearer ${token}`
                     },
-                    body: JSON.stringify({ action: 'get_user', userId: userId })
+                    body: JSON.stringify({ action: 'get_user', user_id: userId })
                 });
                 const data = await response.json();
                 profileData = data.data;
+
+                // User Not Found handler
+                if (!data.success) {
+                    setUserNotFound(true);
+                    return;
+                }
             }
 
             setProfile(profileData);
 
             // Fetch posts from found profile
-            const postsRes = await fetch('api/postController.php', {
+            const postsRes = await fetch('/api/postController.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json',
@@ -75,6 +83,10 @@ function ProfilePage() {
     // HTML Return
     return(
         <div>
+            {userNotFound ? (
+                <UserNotFound />
+            ) : (
+            <>
             <Navbar />
             <section className="section-banner">
                 <div className="banner-container">
@@ -84,7 +96,7 @@ function ProfilePage() {
                             <img src="/img/default-profile-image.jpg" alt="pfp image" />
                         </div>
                     </div>
-                    <h2>{profile.name}</h2>
+                    {profile && <h2>{profile.name}</h2>}
                     <div className="division-line"></div>
                     <ul className="banner-tabs">
                         <li>Información</li>
@@ -149,6 +161,8 @@ function ProfilePage() {
                     )}
                 </main>
             </section>
+            </>
+            )}
         </div>
     );
 }

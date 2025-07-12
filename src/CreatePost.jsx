@@ -14,7 +14,7 @@ function CreatePost({ onClose }) {
         }
 
         try {
-            const response = await fetch('api/postController.php', {
+            const response = await fetch('/api/postController.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
