@@ -9,6 +9,15 @@ body {
     background-color: #f6f6f1;
 }
 
+/*---------- POST SECTION ----------*/
+.postpage-container {
+    display: flex;
+}
+.section-post {
+    display: flex;
+    flex-direction: column;
+}
+
 /*---------- COMMENTS SECTION ----------*/
 .post-comments {
     margin: 20px;
@@ -22,5 +31,23 @@ body {
 }
 
 .comments-content {
+    background-color: #fff;
+}
+
+/*---------- RELATED SECTION ----------*/
+.aside-related {
+    display: flex;
+    flex-direction: column;
+}
+
+.related-header {
+    background-color: #007da5;
+    color: #fff;
+    font-weight: 400;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.related-content {
     background-color: #fff;
 }

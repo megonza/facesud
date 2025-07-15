@@ -2,6 +2,7 @@ import '../public/css/post-style.css';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Navbar from './Navbar'
+import Hotbar from './Hotbar';
 import PostItem from './PostItem';
 
 function PostPage() {
@@ -43,6 +44,7 @@ function PostPage() {
         <div>
             <Navbar />
             <div className="postpage-container">
+                <Hotbar />
                 <section className="section-post">
                     <div className="post-container">
                         <PostItem post={post}/>
@@ -57,7 +59,12 @@ function PostPage() {
                     </div>
                 </section>
                 <aside className="aside-related">
-                    aca todo lo de interes
+                    <div className='related-header'>
+                        <h2>Te puede interesar...</h2>
+                    </div>
+                    <div className='related-content'>
+                        <div className='related-item'></div>
+                    </div>
                 </aside>
             </div>
         </div>
