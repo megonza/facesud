@@ -134,6 +134,13 @@ body {
     color: #9a9a9a;
     font-size: 15px;
 }
+.post-user a {
+    text-decoration: none;
+    color: #1a1a1a;
+}
+.post-user a:hover {
+    text-decoration: underline;
+}
 .btn-createpost {
     display: inline-flex;
     width: 60px;
@@ -164,7 +171,7 @@ body {
 .post-interact p {
     display: inline;
 }
-.interact-like svg, .interact-comment svg, .interact-share svg {
+.interact-like svg, .interact-comment svg, .interact-share svg, .interact-save svg {
     cursor: pointer;
 }
 .interact-like svg:hover {
@@ -175,4 +182,7 @@ body {
 }
 .interact-share svg:hover {
     color: #25b247;
+}
+.interact-save svg:hover {
+    color: #e5c512;
 }

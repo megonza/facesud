@@ -25,7 +25,9 @@ function AccountPanel({ onClose, onLogout }) {
                     <h4>Nombre de la persona</h4>
                 </div>
                 <div>
-                    <button>Ver mi perfil</button>
+                    <a href="/profile">
+                        <button>Ver mi perfil</button>
+                    </a>
                 </div>
             </div>
             <span>

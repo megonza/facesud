@@ -1,0 +1,26 @@
+* {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f6f6f1;
+}
+
+/*---------- COMMENTS SECTION ----------*/
+.post-comments {
+    margin: 20px;
+}
+.comments-header {
+    background-color: #007da5;
+    color: #fff;
+    font-weight: 400;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.comments-content {
+    background-color: #fff;
+}

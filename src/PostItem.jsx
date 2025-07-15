@@ -1,14 +1,19 @@
+import { Link } from 'react-router-dom';
+
 function PostItem({ post }) {
-    console.log("Post recibido en PostItem:", post);
     return (
         <div>
             <div className="post-item">
                 <span className="post-user">
                     <img src="img/default-profile-image.jpg" alt="" />
-                    <h4>{post.Author_name}</h4>
+                    <Link to={`/profile/${post.user_id}`}>
+                        <h4>{post.Author_name}</h4>
+                    </Link>
                     <p>{new Date(post.date_posted).toLocaleString()}</p>
                 </span>
+                <Link to={`/post/${post.post_id}`} className="no-underline text-inherit">
                 <p>{post.text}</p>
+                </Link>
                 <div className="post-interact">
                     <span className="interact-like">
                         <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">

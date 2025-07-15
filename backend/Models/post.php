@@ -28,7 +28,7 @@ class Post {
     //obtener un post de un usuario
     public static function get_post($post_id, $conn, $user_id){
         try{
-            $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.name AS Author_name 
+            $stmt = $conn->prepare("SELECT p.post_id, p.text, p.date_posted, u.name AS Author_name, 
                                     COUNT(DISTINCT pl.like_id) AS likes_count,
                                     COUNT(DISTINCT c.comments_id) AS comments_count ,
                                     EXISTS (
@@ -40,7 +40,7 @@ class Post {
                                     LEFT JOIN post_likes pl ON p.post_id = pl.post_id
                                     LEFT JOIN comments c ON p.post_id = c.post_id
                                     WHERE p.post_id = ?
-                                    GROUP BY p post_id");
+                                    GROUP BY p.post_id");
                                     
             $stmt->execute([$user_id, $post_id]);
             $post = $stmt->fetch(PDO::FETCH_ASSOC);
