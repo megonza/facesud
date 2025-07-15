@@ -5,7 +5,7 @@ import Navbar from './Navbar'
 import Hotbar from './Hotbar';
 import PostItem from './PostItem';
 
-function PostPage() {
+const PostPage = () => {
     // States for fetching post
     const { postId } = useParams();
     const [post, setPost] = useState(null);

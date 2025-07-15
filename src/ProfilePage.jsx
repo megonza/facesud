@@ -5,7 +5,7 @@ import CreatePost from './CreatePost';
 import PostItem from './PostItem';
 import UserNotFound from './UserNotFound';
 
-function ProfilePage() {
+const ProfilePage = () => {
     // States for loading profiles and posts, and getting user_id from URL
     const { userId } = useParams();
     const [profile, setProfile] = useState(null);

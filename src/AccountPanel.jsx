@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import '../public/css/modals-style.css';
 
-function AccountPanel({ onClose, onLogout }) {
+const AccountPanel = ({ onClose, onLogout }) => {
     const panelRef = useRef(null);
 
     useEffect(() => {

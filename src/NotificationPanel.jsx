@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import '../public/css/modals-style.css';
 
-function NotificationPanel({ onClose }) {
+const NotificationPanel = ({ onClose }) => {
     const panelRef = useRef(null);
 
     useEffect(() => {

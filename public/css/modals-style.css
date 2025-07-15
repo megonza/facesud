@@ -172,3 +172,22 @@
     background-color: #006184;
     cursor: pointer;
 }
+
+/*---------- POST OPTIONS MODAL ----------*/
+.postoptions-container {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.postoptions-container button {
+    border: none;
+    background-color: #fff;
+    width: 100px;
+    padding: 10px;
+}
+.postoptions-container button:hover {
+    cursor: pointer;
+    background-color: #006184;
+    color: #fff;
+}

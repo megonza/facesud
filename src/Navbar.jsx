@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import NotificationPanel from './NotificationPanel';
 import AccountPanel from './AccountPanel';
 
-function Navbar() {
+const Navbar = () => {
     //State for showing panels
     const [showNotifPanel, setShowNotifPanel] = useState(false);
     const [showAccPanel, setShowAccPanel] = useState(false);

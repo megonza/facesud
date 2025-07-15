@@ -1,6 +1,6 @@
 import '../public/css/home-style.css';
 
-function Hotbar() {
+const Hotbar = () => {
     return (
         <aside className='home-hotbar'>
             <div className='hotbar-item'>

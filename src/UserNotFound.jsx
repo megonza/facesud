@@ -1,6 +1,6 @@
 import '../public/css/miscpages-style.css';
 
-function UserNotFound() {
+const UserNotFound = () => {
     return (
         <div className="user-not-found-container">
             <h2>Miembro no encontrado</h2>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../public/css/modals-style.css';
 
-function CreatePost({ onClose }) {
+const CreatePost = ({ onClose }) => {
     //States for saving textarea content
     const [postText, setPostText] = useState('');
 

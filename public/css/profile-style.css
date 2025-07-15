@@ -121,6 +121,10 @@ body {
     display: flex;
     align-items: center;
 }
+.post-user a {
+    text-decoration: none;
+    color: #000;
+}
 .post-user img{
     width: 45px;
     border-radius: 50%;
@@ -140,6 +144,16 @@ body {
 }
 .post-user a:hover {
     text-decoration: underline;
+}
+.post-user span {
+    display: inline-flex;
+    background-color: #ddd;
+    padding: 0px 3px 0px 3px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.post-user span:hover {
+    background-color: #ccc;
 }
 .btn-createpost {
     display: inline-flex;
