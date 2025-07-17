@@ -1,10 +1,44 @@
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PostOptionsPanel from './PostOptionsPanel';
+import EditPost from './EditPost';
 
 const PostItem = ({ post }) => {
-    // States for options modal
+    // States for options modal and edit post modal
     const [showOptions, setShowOptions] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editPostData, setEditPostData] = useState(null);
+
+    const handleDelete = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("No se encontró el token.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('action', 'delete_post');
+        formData.append('post_id', post.post_id);
+
+        try {
+            const response = await fetch('/api/postController.php', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('Publicación eliminada con éxito.');
+            } else {
+                alert('Hubo un error al eliminar la publicación.');
+            }
+        } catch (error) {
+            console.error('Hubo un error al eliminar la publicación: ', error);
+        }
+    };
 
     return (
         <div>
@@ -22,10 +56,13 @@ const PostItem = ({ post }) => {
                     </span>
                     {showOptions && (
                         <PostOptionsPanel 
-                        onEdit={() => console.log("Esto es verdad !!", post.post_id)} 
-                        onDelete={() => console.log("Eliminando...ahrr", post.post_id)}
+                        onEdit={() => {setEditPostData(post); setShowEditModal(true)}} 
+                        onDelete={() => handleDelete()}
                         onClose={() => setShowOptions(false)}
                         />
+                    )}
+                    {showEditModal && (
+                        <EditPost post={editPostData} onClose={() => setShowEditModal(false)} />
                     )}
                 </span>
                 <Link to={`/post/${post.post_id}`} className="no-underline text-inherit">
