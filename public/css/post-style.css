@@ -12,15 +12,19 @@ body {
 /*---------- POST SECTION ----------*/
 .postpage-container {
     display: flex;
+    justify-content: space-between;
 }
 .section-post {
     display: flex;
     flex-direction: column;
+    margin: 10px;
+    width: 50%;
 }
 
 /*---------- COMMENTS SECTION ----------*/
 .post-comments {
     margin: 20px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
 }
 .comments-header {
     background-color: #007da5;
@@ -38,6 +42,7 @@ body {
 .aside-related {
     display: flex;
     flex-direction: column;
+    margin: 10px;
 }
 
 .related-header {

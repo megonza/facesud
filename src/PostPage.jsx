@@ -54,7 +54,12 @@ const PostPage = () => {
                             <h2>Comentarios</h2>
                         </div>
                         <div className="comments-content">
-                            <div className="comment-item"></div>
+                            <div className="comment-item">
+                                nigga melon panch
+                            </div>
+                            <div className="comment-item">
+                                ayer cague algo parecido
+                            </div>
                         </div>
                     </div>
                 </section>
