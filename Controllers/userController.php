@@ -137,6 +137,37 @@ if ($method =="POST"){
                 http_response_code($result['success'] ? 200 : 404);
                 break;
 
+            case 'edit_profile':
+                $jwt = getTokensHeader();
+                if(!$jwt){
+                    http_response_code(401);
+                    $result =["error" => "No se proporcionó el token"];
+                    break;
+                }
+
+                try{
+                    $decoded = JWT::decode($jwt, new Key($secretKey, 'HS256'));
+                    $user_id = $decoded->data->id;
+                }catch(Exception $e){
+                    http_response_code(401);
+                    $result = ["error" => "Token inválido"];
+                    break;
+                }
+
+                //validacion de datos
+                if(empty($data['name']) || !isset($data['hierarchy'])){
+                    http_response_code(400);
+                    $result = ["error" => "Nombre y jerarquía son requeridos"];
+                    break;
+                }
+
+                $name = trim($data['name']);
+                $hierarchy = trim($data['hierarchy']);
+
+                $result = User::editProfile($user_id, $name, $hierarchy, $conn);
+                http_response_code($result['success'] ? 200:400);
+                break;
+
             default:
                 http_response_code(400);
                 $result = ["error" => "Acción no válida"];

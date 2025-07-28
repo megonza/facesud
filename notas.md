@@ -12,6 +12,12 @@
 7 Comentarios con imagenes
 
 8 Añadir videos a los posts
+
+9-Verificar extensión y tamaño de imagen (jpg, png, máximo 2 MB).
+
+10-Evitar scripts en los comentarios (XSS).
+
+11-Agregar LIMIT y OFFSET para paginar comentarios y posts.
 -------------------------------------------------------------------------
 get_post:
 
@@ -56,6 +62,7 @@ Método: POST
 |register|   un nuevo usuario|
 |login| Inicia sesión, devuelve un JWT|
 |profile| Obtiene perfil del usuario desde el JWT|
+|edit_profile | Edita el perfil del usuario|
 
 ***
 
@@ -75,3 +82,10 @@ Endpoints (action) y descripción:
 |getUserPosts|Obtener todos los posts de un usuario específico|
 |getAllPosts|Obtener todos los posts del sistema, con datos de autor, likes, etc|
 |edit_post| Editar publicación|
+|get_comments|Muestra todos los comentarios de un post|
+|delete_comment | Borra comentario del usuario logueado
+|edit_comment | Edita un comentario de un usuario logueado
+|add_comment | un usuario logueado crea un comentario 
+|unlike_post | Elimina el like a un posteo
+|like_post | Añade like a un posteo
+|

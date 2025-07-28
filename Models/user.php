@@ -75,6 +75,18 @@ class User{
         return ["success" => false, "message" => "Error en base de datos"];
         }
     }
+    public static function editProfile($user_id, $name, $hierarchy, $conn){
+        try{
+            $stmt = $conn->prepare("UPDATE users SET name=? , hierarchy=? WHERE user_id=?");
+            $stmt->execute([$name,$hierarchy,$user_id]);
+            return[
+                'success' => true,
+                'message' => "Perfil editado con exito!"
+        ];
+        }catch(PDOException $e){
+            return["success" => false, "message" => "Error en la base de datos al editar perfil: " . $e->getMessage()];
+        }
+    }
 
 }
 ?>
