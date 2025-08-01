@@ -105,7 +105,7 @@ if ($method =="POST"){
                     //exit;
                 }
                 break;
-                
+            #Muestra el usuario logueado
             case 'profile':
                 $jwt = getTokensHeader();
                 if(!$jwt){
@@ -125,7 +125,7 @@ if ($method =="POST"){
                         $result = ["success" => false, "message" => "Token inválido o expirado". $e->getMessage()];
                 }
                 break;
-
+            #Muestra otro user
             case 'get_user_profile':
                 if(!isset($data['target_user_id'])){
                     http_response_code(400);
@@ -136,7 +136,8 @@ if ($method =="POST"){
                 $result = $userModel->getUserByID($data['target_user_id'], $conn);
                 http_response_code($result['success'] ? 200 : 404);
                 break;
-
+            
+            #editar perfil
             case 'edit_profile':
                 $jwt = getTokensHeader();
                 if(!$jwt){
@@ -166,6 +167,54 @@ if ($method =="POST"){
 
                 $result = User::editProfile($user_id, $name, $hierarchy, $conn);
                 http_response_code($result['success'] ? 200:400);
+                break;
+            #cambiar foto de perfil
+            case 'upload_profile_picture':
+                $jwt = getTokensHeader();
+                if (!$jwt) {
+                    http_response_code(400);
+                    $result = ["error" => "Token inválido"];
+                    break;
+                }
+
+                try {
+                    $decoded = JWT::decode($jwt, new Key($secretKey, 'HS256'));
+                    $user_id = $decoded->data->id;
+
+                    if (!isset($_FILES['profile_picture'])) {
+                        http_response_code(400);
+                        $result = ["error" => "Imagen no proporcionada"];
+                        break;
+                    }
+
+                    $file = $_FILES['profile_picture'];
+                    $target_dir = "uploads/profile_pics/";
+                    if (!is_dir($target_dir)) {
+                        mkdir($target_dir, 0777, true);
+                    }
+
+                    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                    $filename = uniqid() . '.' . $ext;
+                    $target_file = $target_dir . $filename;
+
+                    if (move_uploaded_file($file['tmp_name'], $target_file)) {
+                        $userModel = new User($db);
+                        $response = $userModel->updateProfilePicture($user_id, $target_file, $conn);
+
+                        if ($response['success']) {
+                            $result = ["message" => $response['message']];
+                        } else {
+                            http_response_code(500);
+                            $result = ["error" => $response['message']];
+                        }
+                    } else {
+                        http_response_code(500);
+                        $result = ["error" => "Error al mover el archivo"];
+                    }
+                } catch (Exception $e) {
+                    http_response_code(401);
+                    $result = ["error" => "Token inválido"];
+                }
                 break;
 
             default:

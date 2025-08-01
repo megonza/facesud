@@ -88,5 +88,15 @@ class User{
         }
     }
 
+    public static function updateProfilePicture($user_id, $file_path, $conn){
+        try{
+            $stmt = $conn->prepare("UPDATE users SET profile_picture = ? WHERE user_id = ?");
+            $stmt->execute([$file_path,$user_id]);
+            return["success" => true, "message"=>"Foto actualizada con exito"];
+        }catch(PDOException $e){
+            return['success'=> false, "message" => "No se pudo actualizar perfil " . $e->getMessage()];
+        }
+    }
+
 }
 ?>
