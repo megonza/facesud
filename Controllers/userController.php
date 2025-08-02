@@ -18,6 +18,8 @@ use \Firebase\JWT\Key;
 
 #userController.php version API REST papaaa
 $method = $_SERVER['REQUEST_METHOD'];
+
+$action = $data['action'] ?? $_POST['action'] ?? null;
 //Crea el objeto User
 $userModel = new User($conn);
 
@@ -29,10 +31,11 @@ if ($method =="POST"){
 
 
     //si la clave 'action' del cuerpo del json tiene algo entonces: 
-    if (isset($data['action'])) {
+    #if (isset($data['action'])) {
+    if($action){
 
         //Segun el action: Trae de user.php
-        switch($data['action']){
+        switch($action){
             case 'register':
 
                 //verifico que los datos no esten vacios
